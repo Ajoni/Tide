@@ -13,6 +13,11 @@ namespace Tide.Services
     {
         private readonly ApplicationDbContext _context;
 
+        public UserService(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public void AddUser(UserViewModel viewModel)
         {
             if (viewModel == null)
@@ -20,6 +25,9 @@ namespace Tide.Services
 
             var salt = AuthHelper.CreateSalt(128);
             var user = new User(viewModel.Email, AuthHelper.CreateHash(viewModel.Password, salt), salt, viewModel.FirstName, viewModel.LastName);
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
         }
 
         public void DeleteUser(int id)
@@ -64,7 +72,7 @@ namespace Tide.Services
             user.Email = viewModel.Email;
             user.FirstName = viewModel.FirstName;
             user.LastName = viewModel.LastName;
-            if (!string.IsNullOrEmpty(viewModel.Password)) ;
+            if (!string.IsNullOrEmpty(viewModel.Password))
                 user.PasswordHash = AuthHelper.CreateHash(viewModel.Password, user.PasswordSalt);
 
             _context.SaveChanges();

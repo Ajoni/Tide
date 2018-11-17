@@ -14,6 +14,9 @@ namespace Tide.ViewModels
         public string LastName { get; set; }
         public string Password { get; set; }
 
+        public UserViewModel()
+        { }
+
         public UserViewModel(User user)
         {
             Id = user.Id;
