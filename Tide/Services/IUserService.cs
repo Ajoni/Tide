@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,8 +12,10 @@ namespace Tide.Services
     {
         List<User> GetUsers();
         User GetUser(int id);
-        void AddUser(UserViewModel viewModel);
-        void UpdateUser(UserViewModel viewModel);
+        List<User> AddUser(UserViewModel viewModel);
+        List<User> UpdateUser(UserViewModel viewModel);
         void DeleteUser(int id);
+
+        Task<ObjectResult> Login(LoginViewModel viewModel);
     }
 }

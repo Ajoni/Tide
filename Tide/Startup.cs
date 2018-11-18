@@ -34,6 +34,7 @@ namespace Tide
         {
             services.AddSingleton<IConfiguration>(provider => Configuration);
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ITokenService, TokenService>();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
 
@@ -88,7 +89,8 @@ namespace Tide
             });
 
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
             services.AddKendo();
         }
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tide.Services;
@@ -18,14 +20,15 @@ namespace Tide.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
+
+        [HttpPost]
         [Route("users")]
-        public IActionResult Users()
+        public IActionResult Users([DataSourceRequest]DataSourceRequest request)
         {
             try
             {
                 var users = _userService.GetUsers();
-                return Ok(UserViewModel.ToList(users));
+                return Ok(UserViewModel.ToList(users).ToDataSourceResult(request));
             }
             catch (Exception)
             {
@@ -54,12 +57,11 @@ namespace Tide.Controllers
 
         [HttpPost]
         [Route("user/add")]
-        public IActionResult Add([FromBody]UserViewModel viewModel)
+        public IActionResult Add([DataSourceRequest]DataSourceRequest request, UserViewModel viewModel)
         {
             try
             {
-                _userService.AddUser(viewModel);
-                return Ok();
+                return Ok(_userService.AddUser(viewModel).ToDataSourceResult(request));
             }
             catch (ArgumentException ex)
             {
@@ -73,12 +75,11 @@ namespace Tide.Controllers
 
         [HttpPost]
         [Route("user/update")]
-        public IActionResult Update([FromBody]UserViewModel viewModel)
+        public IActionResult Update([DataSourceRequest]DataSourceRequest request, UserViewModel viewModel)
         {
             try
             {
-                _userService.UpdateUser(viewModel);
-                return Ok();
+                return Ok(_userService.UpdateUser(viewModel).ToDataSourceResult(request));
             }
             catch (ArgumentException ex)
             {
@@ -90,13 +91,13 @@ namespace Tide.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("user/delete/{id}")]
-        public IActionResult Delete(int id)
+        [HttpPost]
+        [Route("user/delete")]
+        public IActionResult Delete([DataSourceRequest]DataSourceRequest request, UserViewModel user)
         {
             try
             {
-                _userService.DeleteUser(id);
+                _userService.DeleteUser(user.Id);
                 return Ok();
             }
             catch (ArgumentException ex)
