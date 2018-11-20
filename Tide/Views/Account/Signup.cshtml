@@ -1,0 +1,64 @@
+﻿@page
+@model Tide.ViewModels.SignupViewModel
+@{
+}
+
+<div class="form-horizontal">
+    <form name="form">
+        <h4>ApplicationUser</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Kendo().TextBoxFor(m => m.Email).HtmlAttributes(new { placeholder = "Your emial address", required = "required", validationmessage = "Enter emial address" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Kendo().TextBoxFor(m => m.Password).HtmlAttributes(new { placeholder = "Your password", required = "required", validationmessage = "Enter password" }).HtmlAttributes(new { type = "password" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Kendo().TextBoxFor(m => m.FirstName).HtmlAttributes(new { placeholder = "Your first name", required = "required", validationmessage = "Enter first name" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Kendo().TextBoxFor(m => m.LastName).HtmlAttributes(new { placeholder = "Your last name", required = "required", validationmessage = "Enter last name" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input value="Signup" class="btn btn-default" onclick="singupApiCall()" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+
+    function singupApiCall() {
+        var formData = $('form').serializeArray();
+        var body = JSON.stringify({
+            Email: formData[0].value,
+            Password: formData[1].value,
+            FirstName: formData[2].value,
+            LastName: formData[3].value
+        })
+        _fetch("https://localhost:44306/signup", body)
+            .then(res => {
+                Promise.resolve(res);
+                window.location.replace("https://localhost:44306/Account/Login")
+            })
+    }
+
+</script>

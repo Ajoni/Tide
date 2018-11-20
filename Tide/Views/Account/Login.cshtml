@@ -1,0 +1,67 @@
+﻿@page
+@model Tide.ViewModels.LoginViewModel
+@{
+}
+
+<div class="form-horizontal">
+    <form name="form">
+        <h4>ApplicationUser</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Kendo().TextBoxFor(m => m.Email).HtmlAttributes(new { placeholder = "Your emial address", required = "required", validationmessage = "Enter emial address" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Kendo().TextBoxFor(m => m.Password).HtmlAttributes(new { placeholder = "Your password", required = "required", validationmessage = "Enter password" }).HtmlAttributes(new { type = "password" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input value="Login" class="btn btn-default" onclick="loginApiCall()" id="submit-btn" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+
+    function loginApiCall() {
+        var formData = $('form').serializeArray();
+        var body = JSON.stringify({
+            Email: formData[0].value,
+            Password: formData[1].value
+        })
+
+        _fetch("https://localhost:44306/login", body)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                localStorage.setItem("acces_token", data.token);
+                localStorage.setItem("refresh_token", data.refreshToken);
+                Promise.resolve(data);
+                window.location.replace("https://localhost:44306/Home/Index")
+            });
+    }
+
+    function handleChange() {
+        var empty = false;
+        var formData = $('form').serializeArray();
+        if (formData.length < 1) empty = true;
+        for (var i = 0; i < formData.length; i++) {
+            if (formData[i].value.length < 1) empty = true;
+        }
+
+        if (empty) {
+            $('#submit-btn').attr('disabled', 'disabled');
+        } else {
+            $('#submit-btn').removeAttr('disabled');
+        }
+    }
+</script>

@@ -2,8 +2,6 @@
     ViewData["Title"] = "Home Page";
 }
 
-
-
 <div >
 
     <h2>Users</h2>
@@ -25,6 +23,7 @@
         .Sortable()
         .Pageable()
         .Filterable()
+        .AutoBind(false)
         .DataSource(dataSource =>
           dataSource
             .Ajax()
@@ -44,11 +43,25 @@
 
 <script>
 
-function error_handler(e) {
-    var errors = $.parseJSON(e.xhr.responseText);
+    $(function () {
+        var grid = $("#Users").data("kendoGrid");
+        console.log(grid);
+        grid.dataSource.transport.options.read.beforeSend = addJWT;
+        grid.dataSource.transport.options.update.beforeSend = addJWT;
+        grid.dataSource.transport.options.create.beforeSend = addJWT;
+        grid.dataSource.transport.options.destroy.beforeSend = addJWT;
+        grid.dataSource.read();
+    });
 
-    if (errors) {
-        alert("Errors:\n" + errors.join("\n"));
+    function error_handler(e) {
+        var errors = $.parseJSON(e.xhr.responseText);
+
+        if (errors) {
+            alert("Errors:\n" + errors.join("\n"));
+        }
     }
-}
+
+    function addJWT(req) {
+        req.setRequestHeader('Authorization', "Bearer " + localStorage.getItem("acces_token"));
+    };
 </script>
