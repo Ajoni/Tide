@@ -1,4 +1,21 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function checkStatus(response) {
+    if (response.status >= 200 && response.status < 300) {
+        return response
+    } else {
+        var error = new Error(response.statusText)
+        error.response = response
+        throw error
+    }
+}
 
-// Write your JavaScript code.
+function _fetch(url, body) {
+    const headers = {
+        'Content-Type': 'application/json'
+    }
+    return fetch(url, {
+            method: "POST",
+            headers: headers,
+            body: body
+    })
+        .then(checkStatus)
+}
