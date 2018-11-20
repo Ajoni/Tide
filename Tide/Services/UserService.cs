@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Tide.Data;
 using Tide.Helpers;
 using Tide.Models;
@@ -89,29 +86,5 @@ namespace Tide.Services
             return list;
         }
 
-        public async Task<ObjectResult> Login(LoginViewModel viewModel)
-        {
-            var user = AuthHelper.Authenticate(viewModel.Email, viewModel.Password, _context);
-            if (user == null)
-                throw new ArgumentException();
-
-            var userClaims = new[]
-            {
-                new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            };
-
-            var jwtToken = _tokenService.GenerateAccessToken(userClaims);
-            var refreshToken = _tokenService.GenerateRefreshToken();
-
-            user.RefreshToken = refreshToken;
-            await _context.SaveChangesAsync();
-
-            return new ObjectResult(new
-            {
-                token = jwtToken,
-                refreshToken
-            });
-        }
     }
 }
