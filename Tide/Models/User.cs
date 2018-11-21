@@ -18,19 +18,23 @@ namespace Tide.Models
         [Required] public string FirstName { get; set; }
         [Required] public string LastName { get; set; }
 
+        public int? FavPlaceId { get; set; }
+        public Place FavPlace { get; set; }
+
 
         public User()
         {
         }
 
         public User(string email, byte[] passwordHash, byte[] passwordSalt,
-            string firstName, string lastName)
+            string firstName, string lastName, int? favPlaceId)
         {
             Email = email;
             FirstName = firstName;
             LastName = lastName;
             PasswordHash = passwordHash;
             PasswordSalt = passwordSalt;
+            FavPlaceId = favPlaceId;
         }
     }
 }

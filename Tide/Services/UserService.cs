@@ -26,7 +26,7 @@ namespace Tide.Services
 
             var salt = AuthHelper.CreateSalt(128);
             var list = new List<User>();
-            var user = new User(viewModel.Email, AuthHelper.CreateHash(viewModel.Password, salt), salt, viewModel.FirstName, viewModel.LastName);
+            var user = new User(viewModel.Email, AuthHelper.CreateHash(viewModel.Password, salt), salt, viewModel.FirstName, viewModel.LastName, viewModel.FavPlaceId);
             list.Add(user);
             _context.Users.Add(user);
             _context.SaveChanges();
@@ -36,9 +36,6 @@ namespace Tide.Services
 
         public void DeleteUser(int id)
         {
-            if(id < 1)
-                throw new ArgumentException();
-
             var user = _context.Users.SingleOrDefault(u => u.Id == id);
             if (user == null)
                 throw new ArgumentException($"User with id: {id} not found");
@@ -49,9 +46,6 @@ namespace Tide.Services
 
         public User GetUser(int id)
         {
-            if (id < 1)
-                throw new ArgumentException();
-
             var user = _context.Users.SingleOrDefault(u => u.Id == id);
             if (user == null)
                 throw new ArgumentException($"User with id: {id} not found");
@@ -77,6 +71,7 @@ namespace Tide.Services
             user.Email = viewModel.Email;
             user.FirstName = viewModel.FirstName;
             user.LastName = viewModel.LastName;
+            user.FavPlaceId = viewModel.FavPlaceId;
             if (!string.IsNullOrEmpty(viewModel.Password))
                 user.PasswordHash = AuthHelper.CreateHash(viewModel.Password, user.PasswordSalt);
 

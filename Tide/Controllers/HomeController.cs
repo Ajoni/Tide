@@ -6,7 +6,12 @@ namespace Tide.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult User()
+        {
+            return View();
+        }
+
+        public IActionResult Place()
         {
             return View();
         }

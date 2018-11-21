@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Places Page";
+}
+
+<div>
+
+    <h2>Places</h2>
+
+    @(Html.Kendo().Grid<Tide.ViewModels.PlaceViewModel>()
+                        .Name("Places")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(p => p.Id);
+                            columns.Bound(p => p.Name);
+                            columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
+                        })
+                        .ToolBar(tools =>
+                        {
+                            tools.Create();
+                        })
+                        .Sortable()
+                        .Pageable()
+                        .Filterable()
+                        .AutoBind(false)
+                        .DataSource(dataSource =>
+                          dataSource
+                            .Ajax()
+                            .Model(model =>
+                                {
+                                    model.Id(place => place.Id);
+                                    model.Field(place => place.Id).Editable(false);
+                                })
+                            .Events(events => events.Error("error_handler"))
+                            .Read(read => read.Action("Places", "Place"))
+                            .Create(create => create.Action("Add", "Place"))
+                            .Update(update => update.Action("Update", "Place"))
+                            .Destroy(destroy => destroy.Action("Delete", "Place"))
+                        )
+    )
+</div>
+
+<script>
+
+    $(function () {
+        var grid = $("#Places").data("kendoGrid");
+        console.log(grid);
+        grid.dataSource.transport.options.read.beforeSend = addJWT;
+        grid.dataSource.transport.options.update.beforeSend = addJWT;
+        grid.dataSource.transport.options.create.beforeSend = addJWT;
+        grid.dataSource.transport.options.destroy.beforeSend = addJWT;
+        grid.dataSource.read();
+    });
+
+    function error_handler(e) {
+        var errors = $.parseJSON(e.xhr.responseText);
+
+        if (errors) {
+            alert("Errors:\n" + errors.join("\n"));
+        }
+    }
+
+    function addJWT(req) {
+        if (!loggedIn() && getToken(refreshTokenName)) {
+            refresh(window.location.host)
+                .then(res => {
+                req.setRequestHeader('Authorization', "Bearer " + res.accessToken)
+                Promise.resolve(res);
+                });
+        }
+        else {
+            console.log("else")
+            req.setRequestHeader('Authorization', "Bearer " + localStorage.getItem("acces_token"));
+        }
+    };
+</script>

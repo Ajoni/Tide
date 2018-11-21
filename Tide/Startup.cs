@@ -31,6 +31,7 @@ namespace Tide
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IPlaceService, PlaceService>();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Tide.Models;
 
 namespace Tide.ViewModels
@@ -14,6 +10,7 @@ namespace Tide.ViewModels
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Password { get; set; }
+        public int? FavPlaceId { get; set; }
 
         public UserViewModel()
         { }
@@ -24,6 +21,7 @@ namespace Tide.ViewModels
             Email = user.Email;
             FirstName = user.FirstName;
             LastName = user.LastName;
+            FavPlaceId = user.FavPlaceId;
         }
 
         public static List<UserViewModel> ToList(List<User> users)

@@ -20,5 +20,6 @@ namespace Tide.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Place> Places { get; set; }
     }
 }
