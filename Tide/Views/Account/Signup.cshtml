@@ -54,7 +54,10 @@
             FirstName: formData[2].value,
             LastName: formData[3].value
         })
-        _fetch("https://localhost:44306/signup", body)
+        _fetch("https://localhost:44306/Account/Signup", {
+            method: 'POST',
+            body
+        })
             .then(res => {
                 Promise.resolve(res);
                 window.location.replace("https://localhost:44306/Account/Login")

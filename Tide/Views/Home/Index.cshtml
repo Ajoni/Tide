@@ -62,6 +62,16 @@
     }
 
     function addJWT(req) {
-        req.setRequestHeader('Authorization', "Bearer " + localStorage.getItem("acces_token"));
+        if (!loggedIn() && getToken(refreshTokenName)) {
+            refresh(window.location.host)
+                .then(res => {
+                req.setRequestHeader('Authorization', "Bearer " + res.accessToken)
+                Promise.resolve(res);
+                });
+        }
+        else {
+            console.log("else")
+            req.setRequestHeader('Authorization', "Bearer " + localStorage.getItem("acces_token"));
+        }
     };
 </script>

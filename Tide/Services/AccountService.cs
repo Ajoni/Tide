@@ -47,7 +47,7 @@ namespace Tide.Services
         }
 
         public async Task Signup(SignupViewModel viewModel)
-        {
+        {   
             var user = _context.Users.SingleOrDefault(u => u.Email == viewModel.Email);
             if (user != null)
                 throw new ArgumentException();

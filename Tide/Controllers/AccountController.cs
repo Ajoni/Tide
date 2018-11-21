@@ -23,7 +23,6 @@ namespace Tide.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel viewModel)
         {
             try
@@ -48,7 +47,6 @@ namespace Tide.Controllers
         }
 
         [HttpPost]
-        [Route("signup")]
         public async Task<IActionResult> Signup([FromBody] SignupViewModel viewModel)
         {
             try
