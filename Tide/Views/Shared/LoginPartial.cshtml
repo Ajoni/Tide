@@ -1,21 +1,5 @@
-﻿@if (ViewBag.status == "loggedin")
-{
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-        @Html.AntiForgeryToken()
-
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                Hello @User.Identity.Name!
-            </li>
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-        </ul>
-    }
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Signup", "Signup", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-    </ul>
-}
+﻿<ul class="nav navbar-nav navbar-right">
+    <li>@Html.ActionLink("Signup", "Signup", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+    <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    <li><a href="#" onclick="logout(window.location.host)">Log out</a></li>
+</ul>

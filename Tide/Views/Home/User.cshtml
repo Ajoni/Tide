@@ -14,7 +14,8 @@
             columns.Bound(p => p.FirstName);
             columns.Bound(p => p.LastName);
             columns.Bound(p => p.Email);
-            columns.Bound(p => p.FavPlaceId);
+            columns.Bound(p => p.Password);
+            columns.Bound(p => p.FavPlaceId).EditorTemplateName("PlaceDropdownList");
             columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
         })
         .ToolBar(tools =>
@@ -28,6 +29,7 @@
         .DataSource(dataSource =>
           dataSource
             .Ajax()
+            .Sort(sort => sort.Add("Id").Ascending())
             .Model(model =>
                 {
                     model.Id(user => user.Id);
@@ -46,6 +48,13 @@
 
     $(function () {
         var grid = $("#Users").data("kendoGrid");
+
+        grid.hideColumn("Password");
+
+        grid.bind("beforeEdit", beforeEditHandler);
+        grid.bind("save", saveHandler);
+        grid.bind("cancel", cancelHandler);
+
         grid.dataSource.transport.options.read.beforeSend = addJWT;
         grid.dataSource.transport.options.update.beforeSend = addJWT;
         grid.dataSource.transport.options.create.beforeSend = addJWT;
@@ -73,4 +82,22 @@
             req.setRequestHeader('Authorization', "Bearer " + localStorage.getItem("acces_token"));
         }
     };
+
+    function beforeEditHandler(e) {
+        var grid = $("#Users").data("kendoGrid");
+        grid.showColumn("Password");
+    }
+
+    function saveHandler(e) {
+        var grid = $("#Users").data("kendoGrid");
+        grid.hideColumn("Password");
+    }
+
+    function cancelHandler(e) {
+        var grid = $("#Users").data("kendoGrid");
+        grid.hideColumn("Password");
+    }
+
+
 </script>
+

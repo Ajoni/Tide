@@ -1,0 +1,13 @@
+﻿@model Tide.ViewModels.PlaceViewModel
+
+@(Html.Kendo().DropDownListFor(m=>m)
+                        .DataTextField("Name")
+                        .DataValueField("Id")
+                        .DataSource(source =>
+                            source
+                            .Ajax()
+                            .Sort(sort => sort.Add("Id").Ascending())
+                            .Read(read => read.Action("Places", "Place"))
+
+                        )
+)
